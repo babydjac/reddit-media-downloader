@@ -4,14 +4,14 @@
 
 ## Features
 
-✅ Downloads videos from **v.redd.it** (Reddit-hosted)  
+✅ Downloads videos from **v.redd.it** (Now with Sound)  
 ✅ Downloads videos from **Redgifs** (no watermark)  
 ✅ Downloads images (JPG, PNG, WebP, GIF)  
 ✅ **Schema-resilient** - handles Reddit's changing JSON structure  
 ✅ **Defensive** - never crashes on malformed posts  
 ✅ **Non-interactive** - perfect for automation  
 ✅ Clean progress bars with **Rich**  
-✅ NSFW filtering support  
+✅ NSFW filtering support
 
 ## Installation
 
@@ -22,6 +22,7 @@ cd reddit-media-downloader
 
 # Install dependencies
 pip install -r requirements.txt
+# If using ffmpeg it must be installed on the system
 
 # Install package
 pip install -e .
@@ -43,18 +44,22 @@ reddit --include-nsfw --sort hot https://www.reddit.com/r/subreddit
 
 # Download only images from new posts
 reddit --type image --sort new https://www.reddit.com/r/pics
+
+# Download videos with sound where avalaible
+reddit --type video -ffmpeg https://www.reddit.com/r/subreddit
 ```
 
 ### Command-Line Options
 
 | Flag | Options | Default | Description |
 |------|---------|---------|-------------|
-| `--sort` | `top`, `hot`, `new`, `controversial` | `hot` | Sort order |
-| `--time` | `all`, `year`, `month`, `week`, `day`, `hour` | `all` | Time filter (for top/controversial) |
-| `--type` | `video`, `image`, `all` | `all` | Media type filter |
+| `--sort` | `top`, `hot`, `new`, `controversial` | `hot`   | Sort order |
+| `--time` | `all`, `year`, `month`, `week`, `day`, `hour` | `all`   | Time filter (for top/controversial) |
+| `--type` | `video`, `image`, `all` | `all`   | Media type filter |
 | `--include-nsfw` | — | `False` | Include NSFW (over_18) posts |
-| `--limit` | integer | `100` | Maximum posts to fetch |
+| `--limit` | integer | `100`   | Maximum posts to fetch |
 | `--output` | path | subreddit name | Custom output directory |
+ | `--ffmpeg` | — | `False` | Use ffmpeg to DL with sound |
 
 ### Example Output
 
@@ -111,7 +116,8 @@ This ensures the tool works even when Reddit changes its JSON structure.
 
 ### Reddit-Hosted Videos (v.redd.it)
 - Extracts `fallback_url` from multiple schema locations
-- Downloads DASH MP4 (video only, no audio merging)
+- Downloads DASH MP4 (video only, default)
+- Downloads HLS MP4 (video and audio)
 
 ### Redgifs Videos
 - Fetches temporary API token

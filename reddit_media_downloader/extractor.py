@@ -109,12 +109,14 @@ def extract_vreddit_video(post):
     # Location 1: secure_media
     try:
         fallback_url = post["secure_media"]["reddit_video"]["fallback_url"]
+        hls_playlist_url = post["secure_media"]["reddit_video"]["hls_url"].split("?")[0]
         if fallback_url:
             return [
                 {
                     "url": fallback_url,
                     "filename": f"{post_id}.mp4",
                     "type": "video",
+                    "hls_playlist": hls_playlist_url,
                 }
             ]
     except (KeyError, TypeError):
@@ -123,12 +125,14 @@ def extract_vreddit_video(post):
     # Location 2: media
     try:
         fallback_url = post["media"]["reddit_video"]["fallback_url"]
+        hls_playlist_url = post["media"]["reddit_video"]["hls_url"].split("?")[0]
         if fallback_url:
             return [
                 {
                     "url": fallback_url,
                     "filename": f"{post_id}.mp4",
                     "type": "video",
+                    "hls_playlist": hls_playlist_url,
                 }
             ]
     except (KeyError, TypeError):
@@ -143,6 +147,7 @@ def extract_vreddit_video(post):
                     "url": fallback_url,
                     "filename": f"{post_id}.mp4",
                     "type": "video",
+                    "hls_playlist": None
                 }
             ]
     except (KeyError, TypeError):
@@ -217,6 +222,7 @@ def extract_media(post: Dict[str, Any]) -> List[Dict[str, str]]:
         - url: Direct media URL
         - filename: Output filename
         - type: "video" or "image"
+        - hsl_playlist: HSLPlaylist URL
     """
     if not post or not isinstance(post, dict):
         return []
